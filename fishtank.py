@@ -7,8 +7,8 @@ from time import sleep
 class Fishtank:
     def __init__(self):
         self.lastfeeding = datetime.now().time()
-        self.ph = self.setph(7.0)
-        self.watertemp = self.setwatertemp(75)
+        self.ph = 7.0
+        self.watertemp = 0
         self.waterheatstatus = 0
         self.lastwaterheaton = datetime.now().time()
         self.lastwaterheatoff = datetime.now().time()
