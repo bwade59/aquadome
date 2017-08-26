@@ -27,6 +27,14 @@ class Aquadome:
     def closevent(self):
         self.ventstatus = "closed"
 
-    @staticmethod
-    def main():
+    def main(self):
         print('ok')
+        for gb in self.growbeds:
+            print(gb.getmydesignation())
+        self.fishtank.feedfish()
+        self.fishtank.setph(6.8)
+        print("ph: %0.2f" % self.fishtank.getph())
+        self.fishtank.setwatertemp(75)
+        print("water temp: %0.1f" % self.fishtank.getwatertemp())
+        self.setairtemp(75)
+        print("air temp: %0.1f" % self.getairtemp())
