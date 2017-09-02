@@ -3,6 +3,8 @@
 import threading
 import time
 
+from pymongo import MongoClient
+
 from growbed import Growbed
 from fishtank import Fishtank
 from sumptank import Sumptank
@@ -49,5 +51,14 @@ class Aquadome(threading.Thread):
     def closevent(self):
         self.ventstatus = "closed"
 
+    def testmongo(self):
+        # Connection to Mongo DB
+        client = MongoClient("mongodb://aquaponics:1q2w3e4r@ds161493.mlab.com:61493/aquaponicsdome")
+        db = client.get_database("aquaponicsdome")
+        coll = db.get_collection(("status"))
+        x = coll.find({})
+        for i in x:
+            print(i)
+
     def main(self):
-        self.run()
+        self.testmongo()
