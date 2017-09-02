@@ -3,9 +3,12 @@
 import threading
 import time
 from pprint import pprint
+
 import simplejson as json
 
 from pymongo import MongoClient
+
+from bson import ObjectId
 
 from growbed import Growbed
 from fishtank import Fishtank
@@ -86,20 +89,24 @@ class Aquadome(threading.Thread):
         self.ventstatus = "closed"
 
     def testmongo(self):
-        self.report = {"duration": 1,
-                         "flast": 'date and time',
-                         "fnext": 'date and time',
-                         "fimg": 'feeding.img',
-                         "fimg_time": 'date and time',
-                         "watertemp": 73,
-                         "ventstatus": 'closed',
-                         "ph": 7.0,
-                         "ambtemp": 73,
-                         "pump1": 'on',
-                         "pump2": 'off'}
-        self.report["ambtemp"] = 90
 
-        self.dbconnection.insert(self.report)
+        self.report = {"_id": 0,
+                       "duration": 1,
+                       "flast": 'date and time',
+                       "fnext": 'date and time',
+                       "fimg": 'feeding.img',
+                       "fimg_time": 'date and time',
+                       "watertemp": 73,
+                       "ventstatus": 'closed',
+                       "ph": 7.0,
+                       "ambtemp": 73,
+                       "pump1": 'on',
+                       "pump2": 'off'}
+        for i in range(50, 100):
+            self.report["_id"] = ObjectId()
+            self.report["ambtemp"] = i
+            self.dbconnection.insert(self.report)
+
         x = self.dbconnection.find({})
         for i in x:
             pprint(i)
