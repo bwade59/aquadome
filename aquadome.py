@@ -2,7 +2,7 @@
 
 import threading
 import time
-import pprint
+from pprint import pprint
 
 from pymongo import MongoClient
 
@@ -22,6 +22,14 @@ class Aquadome(threading.Thread):
         self.sumptank = Sumptank()
         self.airtemp = 0
         self.ventstatus = "closed"
+        self.dbconnection = self._get_db_conn()
+
+    def _get_db_conn(self):
+        # Connection to Mongo DB
+        client = MongoClient("mongodb://aquaponics:1q2w3e4r@ds161493.mlab.com:61493/aquaponicsdome")
+        db = client.get_database("aquaponicsdome")
+        coll = db.get_collection(("status"))
+        return coll
 
     def run(self):
         print("Starting " + self.name)
@@ -53,11 +61,7 @@ class Aquadome(threading.Thread):
         self.ventstatus = "closed"
 
     def testmongo(self):
-        # Connection to Mongo DB
-        client = MongoClient("mongodb://aquaponics:1q2w3e4r@ds161493.mlab.com:61493/aquaponicsdome")
-        db = client.get_database("aquaponicsdome")
-        coll = db.get_collection(("status"))
-        x = coll.find({})
+        x = self.dbconnection.find({})
         for i in x:
             pprint(i)
 
