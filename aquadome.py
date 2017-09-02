@@ -3,6 +3,7 @@
 import threading
 import time
 from pprint import pprint
+import simplejson as json
 
 from pymongo import MongoClient
 
@@ -11,17 +12,41 @@ from fishtank import Fishtank
 from sumptank import Sumptank
 
 
+class StatusReport(object):
+    info = {
+        "duration": 1,
+        "flast": [],
+        "fnext": [],
+        "fimg": [],
+        "fimg_time": [],
+        "watertemp": 73,
+        "ventstatus": [],
+        "ph": 7.0,
+        "ambtemp": 73,
+        "pump1": [],
+        "pump2": []}
+
+
+class StatusReportEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, StatusReport):
+            return super(StatusReportEncoder, self).default(obj)
+        return obj.__dict__
+
+
 class Aquadome(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
+        self.report = StatusReport()
         self.threadID = 1
         self.name = "Aquadome"
         self.exitflag = 0
         self.fishtank = Fishtank()
         self.growbeds = {Growbed("GB-1"), Growbed("GB-2")}
         self.sumptank = Sumptank()
-        self.airtemp = 0
-        self.ventstatus = "closed"
+
+        self.report = {}
+
         self.dbconnection = self._get_db_conn()
 
     def _get_db_conn(self):
@@ -61,6 +86,20 @@ class Aquadome(threading.Thread):
         self.ventstatus = "closed"
 
     def testmongo(self):
+        self.report = {"duration": 1,
+                         "flast": 'date and time',
+                         "fnext": 'date and time',
+                         "fimg": 'feeding.img',
+                         "fimg_time": 'date and time',
+                         "watertemp": 73,
+                         "ventstatus": 'closed',
+                         "ph": 7.0,
+                         "ambtemp": 73,
+                         "pump1": 'on',
+                         "pump2": 'off'}
+        self.report["ambtemp"] = 90
+
+        self.dbconnection.insert(self.report)
         x = self.dbconnection.find({})
         for i in x:
             pprint(i)
