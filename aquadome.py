@@ -2,6 +2,7 @@
 
 import threading
 import time
+import pprint
 
 from pymongo import MongoClient
 
@@ -58,7 +59,7 @@ class Aquadome(threading.Thread):
         coll = db.get_collection(("status"))
         x = coll.find({})
         for i in x:
-            print(i)
+            pprint(i)
 
     def main(self):
         self.testmongo()
