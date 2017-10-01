@@ -1,0 +1,48 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Aquaponics (Papa's Igloo)"
+paths:
+  /conditions:
+    get:
+      description: "Gets `condition` objects.\nOptional query param of **size** determines\n\
+        size of returned array\n"
+      operationId: "conditionsGET"
+      parameters: []
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            title: "ArrayOfConditions"
+            items:
+              $ref: "#/definitions/Conditions"
+      x-swagger-router-controller: "Default"
+definitions:
+  Conditions:
+    properties:
+      currenttime:
+        type: "string"
+      feed:
+        type: "boolean"
+      pump1:
+        type: "boolean"
+      pump2:
+        type: "boolean"
+      vent:
+        type: "boolean"
+      fan:
+        type: "boolean"
+      airheat:
+        type: "boolean"
+      waterheat:
+        type: "boolean"
+      lastfeeding:
+        type: "string"
+      waterph:
+        type: "number"
+      watertemp:
+        type: "number"
+      ambienttemp:
+        type: "number"
